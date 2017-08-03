@@ -1,0 +1,18 @@
+{  
+    "name":"Negation Test 1",
+    "description":[  
+        "set a = 0",
+        "a = ~a"
+    ],
+    "bits":64,
+    "input":[  
+        "set a = 0",
+        "a = ~a"
+    ],
+    "expected":[  
+        "BitOps> set a = 0",
+        "BitOps> a = ~a",
+        "1111111111111111111111111111111111111111111111111111111111111111",
+        "BitOps> "
+    ]
+}

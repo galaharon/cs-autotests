@@ -13,7 +13,7 @@ import subprocess
 
 
 # base directory which contains all the test files
-BASE_DIR = '~z5164705/public_html/tests/'
+BASE_DIR = os.path.expanduser('~z5164705/public_html/tests/')
 # a list of valid prefixes for class names
 valid_prefixes = ['cs']
 # format codes for console coloured text

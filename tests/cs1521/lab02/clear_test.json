@@ -1,0 +1,25 @@
+{  
+    "name":"Clear test",
+    "description":[  
+        "set a = 1",
+        "show a",
+        "set a = 10",
+        "show a"
+    ],
+    "bits":32,
+    "input":[  
+        "set a = 1",
+        "show a",
+        "set a = 10",
+        "show a"
+    ],
+    "expected":[  
+        "BitOps> set a = 1",
+        "BitOps> show a",
+        "00000000000000000000000000000001",
+        "BitOps> set a = 10",
+        "BitOps> show a",
+        "00000000000000000000000000000010",
+        "BitOps> "
+    ]
+}
