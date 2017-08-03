@@ -78,7 +78,7 @@ class Test:
             self.challenge = get_optional(data, 'challenge', False)
             self.time_limit = get_optional(data, 'time_limit')
             self.binary = working_directory + '/' + data['binary']
-            self.args = get_optional(data, 'args', [])
+            self.args = [str(arg) for arg in get_optional(data, 'args', [])]
             self.input = [line + '\n' for line in data['input']]
             self.expected = ''.join([line + '\n' for line in data['expected']])
             self.diff = ''
