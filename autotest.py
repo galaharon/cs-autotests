@@ -162,6 +162,6 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     validate_args(args)
-    if not args.no_colour:
+    if args.no_colour:
         colours = dict.fromkeys(colours.keys(), lambda x : x)
     run_tests(load_tests(BASE_DIR + args.cls + '/' + args.lab + '/', args.exercise, args.test, args.challenge))
