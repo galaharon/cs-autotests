@@ -1,2 +1,4 @@
-# cs-autotests
-Autotests for COMP1521 
+Autotests for COMP1521
+======================
+
+TODO: put info here :)
