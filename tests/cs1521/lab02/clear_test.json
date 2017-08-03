@@ -6,7 +6,8 @@
         "set a = 10",
         "show a"
     ],
-    "bits":32,
+    "binary":"bitops",
+    "args":[32],
     "input":[  
         "set a = 1",
         "show a",

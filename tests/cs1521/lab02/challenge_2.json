@@ -2,7 +2,7 @@
     "name":"Challenge 2",
     "description":"<<<<<<, >>>>>>",
     "challenge":true,
-    "bits":64,
+    "binary":"bitops",
     "input":[  
         "set a = 100011",
         "a = a << 5",

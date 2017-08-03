@@ -4,7 +4,8 @@
         "set a = 101010",
         "a = ~a"
     ],
-    "bits":32,
+    "binary":"bitops"
+    "args":[32],
     "input":[  
         "set a = 101010",
         "a = ~a"

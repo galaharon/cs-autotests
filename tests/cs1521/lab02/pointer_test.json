@@ -1,5 +1,6 @@
 {  
     "name":"Pointer test",
+    "binary":"bitops",
     "input":[  
         "set a = 11",
         "set b = 1101",

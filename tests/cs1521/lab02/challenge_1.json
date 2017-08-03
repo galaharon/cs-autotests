@@ -2,7 +2,8 @@
     "name":"Challenge 1",
     "description":"<<, >>",
     "challenge":true,
-    "bits":32,
+    "binary":"bitops",
+    "args":[32],
     "input":[  
         "set a = 1",
         "a = a << 1",
