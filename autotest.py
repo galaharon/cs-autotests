@@ -64,7 +64,7 @@ def run_tests(cls, lab, exercise, test, challenge):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=str(__doc__))
     parser.add_argument('cls', action='store', help='Class which the test belong to.')
     parser.add_argument('lab', action='store', help='The lab to run tests for.')
     parser.add_argument('--exercise', action='store', default='', help='The file to run tests for. By default will run on all applicable files.')
@@ -73,7 +73,6 @@ if __name__ == '__main__':
     parser.add_argument('--no_colour', action='store_true', default=False, help='Turns off colourising in the terminal.')
     
     args = parser.parse_args()
-    
     sanitise_args(args)
     
     if not args.no_colour:
