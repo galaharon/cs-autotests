@@ -4,67 +4,156 @@
 Written by Gal Aharon (2017)
 """
 
-import argparse
+from argparse import ArgumentParser
 from difflib import SequenceMatcher
 import glob
+import json
+import os
+import subprocess
 
 
-_colours = {'red':'\x1b[0;31m{}\x1b[0m', 'green':'\x1b[0;32m{}\x1b[0m'}
-
+# base directory which contains all the test files
 BASE_DIR = '~z5164705/public_html/tests/'
-
-for key in _colours:
-    vars()[key] = lambda x : x 
-
-def gen_colours():
-    for key in _colours:
-        # dynamically create coloured functions because im lazy and also we can do stuff
-        def func(string):
-            return _colours[key].format(string)
-        vars()[key] = func 
+# a list of valid prefixes for class names
+valid_prefixes = ['cs']
+# format codes for console coloured text
+colours_formats = {'red':'\x1b[0;31m{}\x1b[0m', 'green':'\x1b[0;32m{}\x1b[0m'}
+# dictionary of colour functions. Usage: colours['green'](text)
+colours = {key : (lambda s : colours_formats[key].format(s)) for key in colours_formats}
 
 def diff(actual, expected):
-    # modified from code by tzot - https://stackoverflow.com/a/788780/4073852
+    """Returns a diff string if the two string were different which is already colourised.
+    If both inputs are the same, returns None.
+    
+    Modified from code by tzot - https://stackoverflow.com/a/788780/4073852
+    """
     changed = False
     output = []
-    seqm = SequenceMatcher(None, a, b)
+    seqm = SequenceMatcher(None, actual, expected)
     for opcode, a0, a1, b0, b1 in seqm.get_opcodes():
         if opcode == 'equal':
             output.append(seqm.a[a0:a1])
         elif opcode == 'insert':
             changed = True
-            output.append(green(seqm.b[b0:b1]))
+            output.append(colours['green'](seqm.b[b0:b1]))
         elif opcode == 'delete':
             changed = True
-            output.append(red(seqm.a[a0:a1]))
+            output.append(colours['red'](seqm.a[a0:a1]))
         elif opcode == 'replace':
             changed = True
-            output.append(red(seqm.a[a0:a1]) + green(seqm.b[b0:b1]))
+            output.append(colours['red'](seqm.a[a0:a1]) + colours['green'](seqm.b[b0:b1]))
         else:
-            raise RuntimeError('Unexpected OpCode "%s"' % (opcode,))
+            raise RuntimeError('Unexpected OpCode "{}"'.format(opcode))
     return ''.join(output) if changed else None
 
-
-
-def sanitise_args(args):
-    """Makes sure the passed in arguments are a-ok!"""
-    # make sure args.class exists or else print error message
-    # make sure args.lab exists or else print error message
-    # if args.exercise is not '' make sure file exists
-    # if args.test is not blank make sure test exists
+class Test:
+    """A class that represents a single test supplied in JSON file format.
+    For examples look at ~z5164705/public_html/tests
     
-def run_tests(cls, lab, exercise, test, challenge):
-    exercise_dirs = [BASE_DIR + exercise + '/'] if exercise else glob.glob(BASE_DIR + '*/')
-    for exercise_dir in exercise_dirs:
-        test_files = [exercise_dir + test] if tets else glob.glob(exercise_dir + '*.json')
-        for test_file in test_files:
-            test = Test(test_file)
-            test.run()
+        Arguments:
+            test_file - a path to the json file containing the test's information.
+            working_directory - a path to the working directory in which the binary
+                                executable for the test can be found.
+                                
+        Attributes:
+            name - the name of the test (optional)
+            description - a short description of the test (optional)
+            challenge - whether or not the test is considered a challenge
+            time_limit - the time limit of the test in seconds (optional)
+            binary - the path to the executable file which will run this test
+            args - command line arguments to pass to the binary (optional)
+            input - the input this test will deliver to the binary
+            output - the expected output of this test
+            diff - an empty string if the test passed or has not been run, otherwise
+                    a colourised diff between the expected and actual output.
+    """
+    def __init__(self, test_file, working_directory):
+        def get_optional(data, key, default=None):  # helper method
+            return data[key] if key in data else default
+        
+        with open(test_file) as f:
+            data = json.load(f)
+            self.name = get_optional(data, 'name', os.path.splitext(os.path.basename(test_file))[0])
+            self.description = get_optional(data, 'description', 'no description')
+            self.challenge = get_optional(data, 'challenge', False)
+            self.time_limit = get_optional(data, 'time_limit')
+            self.binary = working_directory + '/' + data['binary']
+            self.args = get_optional(data, 'args', [])
+            self.input = [line + '\n' for line in data['input']]
+            self.output = ''.join([line + '\n' for line in data['output']])
+            self.diff = ''
             
+        def run(self):
+            process = subprocess.Popen([self.binary] + self.args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            
+            for line in self.input:
+                process.stdin.write(line.encode())
+            try:
+                out, err = process.communicate(timeout=self.time_limit)
+                if err:
+                    self.diff = """Encountered error running test:
+                    Output: {}
+                    Error output: {}
+                    """.format(out.decode(), err.decode())
+                else:
+                    self.diff = diff(out.decode(), self.expected)
+            except subprocess.TimeoutExpired:
+                self.diff = colours['red']('Time limit exceeded.')
+        
+        def show_diff(self):
+            print()
+            print(self.diff)
+        
 
+def validate_args(args):
+    """Makes sure the passed in arguments are a-ok!"""
+    if not os.path.isdir(BASE_DIR + args.cls):
+        print('{} is not a recognised class'.format(args.cls))
+        if len(args) > 2 and args[0:2] not in valid_prefixes:
+            print('Valid class prefixes: {}'.format(valid_prefixes))
+        exit()
+    if not os.path.isdir(BASE_DIR + args.cls + '/' + args.lab):
+        print('{} is not a valid lab number.'.format(args.lab))
+        print('Example usage: autotest.py cs1000 lab02 [...]')
+        exit()
+        
+        
+def load_tests(directory, exercise='', test_name='', challenge=False):
+    """Loads all json test files from the given directory.
+    If exercise or test name is set, ony matching tests are returned.
+    If challenge is True then challenge tests will not be ignored.
+    """
+    tests = []
+    for test_file in glob.glob(directory + '*.json'):
+        test = Test(test_file, os.getcwd())
+        if (exercise and test.exercise != exercise
+                or test_name and test.name != test_name
+                or not challenge and test.challenge):
+            continue
+        else:
+            tests.append(test)
+    return tests
+    
+def run_tests(tests):
+    failed_tests = []
+    for test in tests:
+        print('{} - ({}) '.format(test.name, test.description), end='')
+        test.run()
+        if test.diff:
+            print(colours['red']('Failed'))
+            test.show_diff()
+        else:
+            print(colours['green']('Passed'))
+    
+    print('Passed {}/{} tests.'.format(len(tests) - len(failed_tests), len(tests)))
+    if failed_tests:
+        print(colours['red']('Tests failed {}'.format(str(failed_tests)[1:-1])))
+    else:
+        print(colours['green']('You passed all the tests! You are awesome! :)'))
+        
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=str(__doc__))
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument('cls', action='store', help='Class which the test belong to.')
     parser.add_argument('lab', action='store', help='The lab to run tests for.')
     parser.add_argument('--exercise', action='store', default='', help='The file to run tests for. By default will run on all applicable files.')
@@ -73,9 +162,7 @@ if __name__ == '__main__':
     parser.add_argument('--no_colour', action='store_true', default=False, help='Turns off colourising in the terminal.')
     
     args = parser.parse_args()
-    sanitise_args(args)
-    
+    validate_args(args)
     if not args.no_colour:
-        gen_colours()
-    
-    run_tests(args.cls, args.lab, args.exercise, args.test, args.challenge)
+        colours = dict.fromkeys(colours.keys(), lambda x : x)
+    run_tests(load_tests(BASE_DIR + args.cls + '/' + args.lab + '/', args.exercise, args.test, args.challenge))
