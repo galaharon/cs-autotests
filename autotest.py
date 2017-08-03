@@ -153,9 +153,9 @@ if __name__ == '__main__':
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('cls', action='store', help='Class which the test belong to.')
     parser.add_argument('lab', action='store', help='The lab to run tests for.')
-    parser.add_argument('--exercise', action='store', default='', help='The file to run tests for. By default will run on all applicable files.')
-    parser.add_argument('--test', action='store', default='', help='A specific test to run. By default runs all tests.')
-    parser.add_argument('--challenge', action='store_true', default=False, help='Use this flag to run challenge as well as regular autotests.')
+    parser.add_argument('-e', '--exercise', action='store', default='', help='The file to run tests for. By default will run on all applicable files.')
+    parser.add_argument('-t', '--test', action='store', default='', help='A specific test to run. By default runs all tests.')
+    parser.add_argument('-c', '--challenge', action='store_true', default=False, help='Use this flag to run challenge as well as regular autotests.')
     parser.add_argument('--no_colour', action='store_true', default=False, help='Turns off colourising in the terminal.')
     
     args = parser.parse_args()
