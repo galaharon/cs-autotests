@@ -109,7 +109,7 @@ def validate_args(args):
     """Makes sure the passed in arguments are a-ok!"""
     if not os.path.isdir(BASE_DIR + args.cls):
         print('{} is not a recognised class'.format(args.cls))
-        if len(args) > 2 and args[0:2] not in valid_prefixes:
+        if len(args.cls) > 2 and args.cls[0:2] not in valid_prefixes:
             print('Valid class prefixes: {}'.format(valid_prefixes))
         exit()
     if not os.path.isdir(BASE_DIR + args.cls + '/' + args.lab):
