@@ -63,7 +63,7 @@ class Test:
             binary - the path to the executable file which will run this test
             args - command line arguments to pass to the binary (optional)
             input - the input this test will deliver to the binary
-            output - the expected output of this test
+            expected - the expected output of this test
             diff - an empty string if the test passed or has not been run, otherwise
                     a colourised diff between the expected and actual output.
     """
@@ -80,7 +80,7 @@ class Test:
             self.binary = working_directory + '/' + data['binary']
             self.args = get_optional(data, 'args', [])
             self.input = [line + '\n' for line in data['input']]
-            self.output = ''.join([line + '\n' for line in data['output']])
+            self.expected = ''.join([line + '\n' for line in data['expected']])
             self.diff = ''
             
         def run(self):
