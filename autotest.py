@@ -82,6 +82,10 @@ class Test:
             self.input = [line + '\n' for line in data['input']]
             self.expected = ''.join([line + '\n' for line in data['expected']])
             self.diff = ''
+        if not os.path.isfile(self.binary):
+            print('You are missing the required file {}'.format(data['binary']))
+            print('Have you compiled your code?')
+            exit()
 
     def run(self):
         process = subprocess.Popen([self.binary] + self.args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
