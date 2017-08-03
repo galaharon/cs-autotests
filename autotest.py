@@ -82,29 +82,28 @@ class Test:
             self.input = [line + '\n' for line in data['input']]
             self.expected = ''.join([line + '\n' for line in data['expected']])
             self.diff = ''
-            
-        def run(self):
-            process = subprocess.Popen([self.binary] + self.args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            
-            for line in self.input:
-                process.stdin.write(line.encode())
-            try:
-                out, err = process.communicate(timeout=self.time_limit)
-                if err:
-                    self.diff = """Encountered error running test:
-                    Output: {}
-                    Error output: {}
-                    """.format(out.decode(), err.decode())
-                else:
-                    self.diff = diff(out.decode(), self.expected)
-            except subprocess.TimeoutExpired:
-                self.diff = colours['red']('Time limit exceeded.')
-        
-        def show_diff(self):
-            print()
-            print(self.diff)
-        
 
+    def run(self):
+        process = subprocess.Popen([self.binary] + self.args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        
+        for line in self.input:
+            process.stdin.write(line.encode())
+        try:
+            out, err = process.communicate(timeout=self.time_limit)
+            if err:
+                self.diff = """Encountered error running test:
+                Output: {}
+                Error output: {}
+                """.format(out.decode(), err.decode())
+            else:
+                self.diff = diff(out.decode(), self.expected)
+        except subprocess.TimeoutExpired:
+            self.diff = colours['red']('Time limit exceeded.')
+    
+    def show_diff(self):
+        print()
+        print(self.diff)
+    
 def validate_args(args):
     """Makes sure the passed in arguments are a-ok!"""
     if not os.path.isdir(BASE_DIR + args.cls):
