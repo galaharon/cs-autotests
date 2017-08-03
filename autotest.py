@@ -54,14 +54,15 @@ class Test:
                                 executable for the test can be found.
                                 
         Attributes:
-            name - the name of the test (optional)
-            description - a short description of the test (optional)
-            challenge - whether or not the test is considered a challenge
-            time_limit - the time limit of the test in seconds (optional)
-            binary - the path to the executable file which will run this test
-            args - command line arguments to pass to the binary (optional)
-            input - the input this test will deliver to the binary
-            expected - the expected output of this test
+            name - the name of the test. (optional)
+            description - a short description of the test. (optional)
+            exercise - the exercise in the lab that this test belongs to. (optional)
+            challenge - whether or not the test is considered a challenge.
+            time_limit - the time limit of the test in seconds. (optional)
+            binary - the path to the executable file which will run this test.
+            args - command line arguments to pass to the binary. (optional)
+            input - the input this test will deliver to the binary.
+            expected - the expected output of this test.
             diff - an empty string if the test passed or has not been run, otherwise
                     a colourised diff between the expected and actual output.
     """
@@ -73,6 +74,7 @@ class Test:
             data = json.load(f)
             self.name = get_optional(data, 'name', os.path.splitext(os.path.basename(test_file))[0])
             self.description = get_optional(data, 'description', 'no description')
+            self.exercise = get_optional(data, 'exercise', data['binary'])
             self.challenge = get_optional(data, 'challenge', False)
             self.time_limit = get_optional(data, 'time_limit')
             self.binary = working_directory + '/' + data['binary']
@@ -121,7 +123,11 @@ def load_tests(directory, exercise='', test_name='', challenge=False):
     If challenge is True then challenge tests will not be ignored.
     """
     tests = []
-    for test_file in glob.glob(directory + '*.json'):
+    files = glob.glob(directory + '*.json')
+    if not files:
+        print('There are no tests currently available for this lab.')
+        exit()
+    for test_file in files:
         test = Test(test_file, os.getcwd())
         if (exercise and test.exercise != exercise
                 or test_name and test.name != test_name
@@ -129,6 +135,9 @@ def load_tests(directory, exercise='', test_name='', challenge=False):
             continue
         else:
             tests.append(test)
+    if not tests:
+        print('No tests matched the given conditions. Use -l to list all available exercises.')
+        exit()
     return tests
     
 def run_tests(tests):
@@ -157,9 +166,14 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--test', action='store', default='', help='A specific test to run. By default runs all tests.')
     parser.add_argument('-c', '--challenge', action='store_true', default=False, help='Use this flag to run challenge as well as regular autotests.')
     parser.add_argument('--no_colour', action='store_true', default=False, help='Turns off colourising in the terminal.')
+    parser.add_argument('-l', '--list', action='store_true', default=False, help='Lists all tests and exercises available.')
     
     args = parser.parse_args()
     validate_args(args)
+    if args.list:
+        print('Valid exercises: {}'.format(
+            set(test.exercise for test in load_tests(BASE_DIR + args.cls + '/' + args.lab + '/'))))
+        exit()
     if args.no_colour:
         colours = dict.fromkeys(colours.keys(), lambda x : x)
     run_tests(load_tests(BASE_DIR + args.cls + '/' + args.lab + '/', args.exercise, args.test, args.challenge))
