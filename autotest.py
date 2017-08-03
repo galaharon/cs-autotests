@@ -16,10 +16,8 @@ import subprocess
 BASE_DIR = os.path.expanduser('~z5164705/public_html/tests/')
 # a list of valid prefixes for class names
 valid_prefixes = ['cs']
-# format codes for console coloured text
-colours_formats = {'red':'\x1b[0;31m{}\x1b[0m', 'green':'\x1b[0;32m{}\x1b[0m'}
-# dictionary of colour functions. Usage: colours['green'](text)
-colours = {key : (lambda s : colours_formats[key].format(s)) for key in colours_formats}
+# colour functions for printing text to console. Example usage print(colours['red']('...'))
+colours = {'red': lambda s : '\x1b[0;31m{}\x1b[0m'.format(s), 'green': lambda s : '\x1b[0;32m{}\x1b[0m'.format(s)}
 
 def diff(actual, expected):
     """Returns a diff string if the two string were different which is already colourised.
