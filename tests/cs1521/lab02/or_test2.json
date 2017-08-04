@@ -1,0 +1,17 @@
+{  
+    "name":"OR test 2",
+    "description":"1 | 1",
+    "binary":"bitops",
+    "input":[  
+        "set a = 1",
+        "set b = 1",
+        "a = a | b"
+    ],
+    "expected":[  
+        "BitOps> set a = 1",
+        "BitOps> set b = 1",
+        "BitOps> a = a | b",
+        "0000000000000000000000000000000000000000000000000000000000000001",
+        "BitOps> "
+    ]
+}
