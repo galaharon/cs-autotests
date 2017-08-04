@@ -20,10 +20,8 @@ If you do not have Python 3 installed, download and install Python3 from [here](
 ## Set-Up
 
 ### If you are on a CSE System
-The script is available at `~z5164705/public_html/autotest.py`. This is a handful to type, so you can set up a short cut command to use every time. If you do not have a bin directory in your home directory yet, you can create one like this:
-```
-mkdir ~/bin
-```
+The script is available at `~z5164705/public_html/autotest.py`. This is a handful to type, so you can set up a short cut command to use every time. If you do not have a bin directory in your home directory yet, you can create one using `mkdir ~/bin`
+
 Navigate to your bin directory:
 ```
 cd ~/bin
