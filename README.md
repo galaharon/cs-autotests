@@ -58,3 +58,13 @@ Not implemented yet
 
 ### Arguments
 To enable challenge tests add `-c` or `--challenge`. To run a particular exercise add `-e [exercise]`. To see a list of available exercises use `-l` or `--list`. To run a specific test use `-t [test name]` (remember to use quotes around the name if it contains spaces).
+
+## Contributing
+If you want to contribute, thanks! It's super helpful if everyone adds tests, since the more tests we have the better we can validate our programs.
+### Contributing tests
+To contribute tests, please take a look at the test files already present for an idea of how to style them. The files should have 1 line per entry, with no trailing new line. All arrays with more than 1 items should be split up 1 per line, use 4 spaces over tabs. Make a pull request for the tests.
+### Feature Requests/Suggestions
+If you have any suggestions or feature requests, please open an issue for them, describing the feature you want, and what you want it for. Feel free to make a pull request instead if you can write the code yourself.
+
+## Reporting Bugs
+If you have found an issue with my code (a test that is failing that shouldn't be, or a test passing incorrectly) then please open an issue, describing the bug and steps on how to reproduce it. Please include whether or not you were using the cse system, and any errors you get **in full**. Similarly to feature requests, if you find a bug and would like to write a fix to it yourself, feel free to do so with a pull request. This should still have all the information you would've otherwise put in an issue.
