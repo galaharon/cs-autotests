@@ -1,6 +1,7 @@
 # ignore everything by default
 /*
 # but allow test files
+!/tests
 !/tests/**
 !.gitignore
 !README.md
