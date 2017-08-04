@@ -152,12 +152,13 @@ def run_tests(tests):
         if test.diff:
             print(colours['red']('Failed'))
             test.show_diff()
+            failed_tests.append(test.name)
         else:
             print(colours['green']('Passed'))
     
     print('Passed {}/{} tests.'.format(len(tests) - len(failed_tests), len(tests)))
     if failed_tests:
-        print(colours['red']('Tests failed {}'.format(str(failed_tests)[1:-1])))
+        print(colours['red']('Tests failed {}'.format(failed_tests)))
     else:
         print(colours['green']('You passed all the tests! You are awesome! :)'))
         
