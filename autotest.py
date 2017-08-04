@@ -76,14 +76,14 @@ class Test:
             self.description = get_optional(data, 'description', 'no description')
             self.exercise = get_optional(data, 'exercise', data['binary'])
             self.challenge = get_optional(data, 'challenge', False)
-            self.time_limit = get_optional(data, 'time_limit')
+            self.time_limit = get_optional(data, 'time_limit', 60)
             self.binary = working_directory + '/' + data['binary']
             self.args = [str(arg) for arg in get_optional(data, 'args', [])]
             self.input = [line + '\n' for line in data['input']]
             self.expected = ''.join([line + '\n' for line in data['expected']])
             self.diff = ''
         if not os.path.isfile(self.binary):
-            print('You are missing the required file {}'.format(data['binary']))
+            print('You are missing the required file: {}'.format(data['binary']))
             print('Have you compiled your code?')
             exit()
 
@@ -93,14 +93,14 @@ class Test:
         for line in self.input:
             process.stdin.write(line.encode())
         try:
-            out, err = process.communicate(timeout=self.time_limit)
+            out, err = process.communicate(timeout=self.time_limit) # TODO test timeout
             if err:
                 self.diff = """Encountered error running test:
                 Output: {}
                 Error output: {}
                 """.format(out.decode(), err.decode())
             else:
-                self.diff = diff(out.decode(), self.expected)
+                self.diff = diff(out.decode(), self.expected) # TODO make sure I didn't break diff
         except subprocess.TimeoutExpired:
             self.diff = colours['red']('Time limit exceeded.')
     
