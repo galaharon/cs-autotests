@@ -11,11 +11,16 @@ import json
 import os
 import subprocess
 
-
 # base directory which contains all the test files
 BASE_DIR = os.path.expanduser('~z5164705/public_html/tests/')
 # colour functions for printing text to console. Example usage print(colours['red']('...'))
 colours = {'red': lambda s : '\x1b[0;31m{}\x1b[0m'.format(s), 'green': lambda s : '\x1b[0;32m{}\x1b[0m'.format(s)}
+
+def dir_name(pathstring):
+    """Returns the directory name from a directory path:
+    e.g. last_directory('/a/b/c/') = 'c'
+    """
+    return os.path.basename(os.path.normpath(pathstring))
 
 def diff(actual, expected):
     """Returns a diff string if the two string were different which is already colourised.
@@ -115,11 +120,11 @@ def validate_args(args):
     """Makes sure the passed in arguments are a-ok!"""
     if not os.path.isdir(BASE_DIR + args.cls):
         print('{} is not a recognised class'.format(args.cls))
-        print('Valid classes: {}'.format([x[1:-1] for x in glob.glob(BASE_DIR + '*/')]))
+        print('Valid classes: {}'.format([dir_name(x) for x in glob.glob(BASE_DIR + '*/')]))
         exit()
     if not os.path.isdir(BASE_DIR + args.cls + '/' + args.lab):
         print('{} is not a valid lab number.'.format(args.lab))
-        print('Valid labs: {}'.format([x[1:-1] for x in glob.glob(BASE_DIR + '/' + args.cls + '/*/')]))
+        print('Valid labs: {}'.format([dir_name(x) for x in glob.glob(BASE_DIR + '/' + args.cls + '/*/')]))
         print('Example usage: autotest.py cs1000 lab02 [...]')
         exit()
         
