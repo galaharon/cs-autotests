@@ -1,15 +1,6 @@
 {  
-    "name":"Set test 1",
-    "description":[  
-        "set a = 1",
-        "show a",
-        "set b = 1000000000000000000000000000000000000000000000000000000000000000",
-        "show b",
-        "set c = a",
-        "show c",
-        "set c = b",
-        "show c"
-    ],
+    "name":"Set test",
+    "description":"Set/show/=",
     "authors":["Riley Sutton"],
     "binary":"bitops",
     "input":[  
