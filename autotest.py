@@ -14,8 +14,6 @@ import subprocess
 
 # base directory which contains all the test files
 BASE_DIR = os.path.expanduser('~z5164705/public_html/tests/')
-# a list of valid prefixes for class names
-valid_prefixes = ['cs']
 # colour functions for printing text to console. Example usage print(colours['red']('...'))
 colours = {'red': lambda s : '\x1b[0;31m{}\x1b[0m'.format(s), 'green': lambda s : '\x1b[0;32m{}\x1b[0m'.format(s)}
 
@@ -90,38 +88,40 @@ class Test:
             exit()
 
     def run(self):
+        """Runs the autotest. Diff will be stored in self.diff"""
         process = subprocess.Popen([self.binary] + self.args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         
         for line in self.input:
             process.stdin.write(line.encode())
         try:
-            out, err = process.communicate(timeout=self.time_limit) # TODO test timeout
+            out, err = process.communicate(timeout=self.time_limit)  # TODO test timeout
             if err:
                 self.diff = """Encountered error running test:
                 Output: {}
                 Error output: {}
                 """.format(out.decode(), err.decode())
             else:
-                self.diff = diff(out.decode(), self.expected) # TODO make sure I didn't break diff
+                self.diff = diff(out.decode(), self.expected)  # TODO make sure I didn't break diff
         except subprocess.TimeoutExpired:
             self.diff = colours['red']('Time limit exceeded.')
     
     def show_diff(self):
-        print()
-        print(self.diff)
+        """Shows the diff if there is one."""
+        if diff:
+            print()
+            print(self.diff)
     
 def validate_args(args):
     """Makes sure the passed in arguments are a-ok!"""
     if not os.path.isdir(BASE_DIR + args.cls):
         print('{} is not a recognised class'.format(args.cls))
-        if len(args.cls) > 2 and args.cls[0:2] not in valid_prefixes:
-            print('Valid class prefixes: {}'.format(valid_prefixes))
+        print('Valid classes: {}'.format([x[1:-1] for x in glob.glob(BASE_DIR + '*/')]))
         exit()
     if not os.path.isdir(BASE_DIR + args.cls + '/' + args.lab):
         print('{} is not a valid lab number.'.format(args.lab))
+        print('Valid labs: {}'.format([x[1:-1] for x in glob.glob(BASE_DIR + '/' + args.cls + '/*/')]))
         print('Example usage: autotest.py cs1000 lab02 [...]')
         exit()
-        
         
 def load_tests(directory, exercise='', test_name='', challenge=False):
     """Loads all json test files from the given directory.
