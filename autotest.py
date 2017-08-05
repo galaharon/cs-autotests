@@ -139,7 +139,7 @@ def load_tests(directory, exercise='', test_name='', challenge=False):
             continue
         else:
             tests.append(test)
-    if not tests:
+    if not tests and (exercise or test_name):
         print('No tests matched the given conditions. Use -l to list all available exercises.')
         exit()
     return tests
