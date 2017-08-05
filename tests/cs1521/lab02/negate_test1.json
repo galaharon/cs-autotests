@@ -4,6 +4,7 @@
         "set a = 0",
         "a = ~a"
     ],
+    "authors":["Gal Aharon"],
     "binary":"bitops",
     "input":[  
         "set a = 0",

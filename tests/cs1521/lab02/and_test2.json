@@ -1,6 +1,7 @@
 {  
     "name":"AND test 2",
     "description":"1 & 1",
+    "authors":["Gal Aharon"],
     "binary":"bitops",
     "input":[  
         "set a = 1",

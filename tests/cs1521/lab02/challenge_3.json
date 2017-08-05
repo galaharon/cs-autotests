@@ -1,6 +1,7 @@
 {  
     "name":"Challenge 3",
     "challenge":true,
+    "authors":["Curtis Millar"],
     "binary":"bitops",
     "input":[
         "set a = 0000000011111111111111111111111111111111000000000000000000000000",

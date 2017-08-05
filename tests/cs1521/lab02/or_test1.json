@@ -1,6 +1,7 @@
 {  
     "name":"OR test 1",
     "description":"1 | 0",
+    "authors":["Riley Sutton"],
     "binary":"bitops",
     "input":[  
         "set a = 0",

@@ -65,6 +65,7 @@ class Test:
             expected - the expected output of this test.
             diff - an empty string if the test passed or has not been run, otherwise
                     a colourised diff between the expected and actual output.
+            authors - a list of authors who contributed the test
     """
     def __init__(self, test_file, working_directory):
         def get_optional(data, key, default=None):  # helper method
@@ -82,6 +83,7 @@ class Test:
             self.input = [line + '\n' for line in data['input']]
             self.expected = ''.join([line + '\n' for line in data['expected']])
             self.diff = ''
+            self.authors = get_optional(data, 'authors', ['no author'])
         if not os.path.isfile(self.binary):
             print('You are missing the required file: {}'.format(data['binary']))
             print('Have you compiled your code?')

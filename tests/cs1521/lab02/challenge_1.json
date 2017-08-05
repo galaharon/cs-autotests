@@ -1,6 +1,7 @@
 {  
     "name":"Challenge 1",
     "description":"<<, >>",
+    "authors":["Gal Aharon"],
     "challenge":true,
     "binary":"bitops",
     "args":[32],

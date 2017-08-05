@@ -15,6 +15,7 @@
         "a = a & b",
         "show d"
     ],
+    "authors":["Gal Aharon"],
     "expected":[  
         "BitOps> set a = 11",
         "BitOps> set b = 1101",
