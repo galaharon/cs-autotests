@@ -1,6 +1,7 @@
 {  
     "name":"Challenge 2",
     "description":"<<<<<<, >>>>>>",
+    "authors":["Gal Aharon", "Harrison Scott"],
     "challenge":true,
     "binary":"bitops",
     "input":[  

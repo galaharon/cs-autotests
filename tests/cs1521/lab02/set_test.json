@@ -10,6 +10,7 @@
         "set c = b",
         "show c"
     ],
+    "authors":["Riley Sutton"],
     "binary":"bitops",
     "input":[  
         "set a = 1",

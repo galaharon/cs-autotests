@@ -1,6 +1,7 @@
 {  
     "name":"AND test 3",
     "description":"1 & 0",
+    "authors":["Riley Sutton"],
     "binary":"bitops",
     "input":[  
         "set a = 1000000000000000000000000000000000000000000000000000000000000001",
