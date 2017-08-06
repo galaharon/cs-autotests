@@ -125,7 +125,6 @@ def validate_args(args):
     if not os.path.isdir(BASE_DIR + args.cls + '/' + args.lab):
         print('{} is not a valid lab number.'.format(args.lab))
         print('Valid labs: {}'.format([dir_name(x) for x in glob.glob(BASE_DIR + '/' + args.cls + '/*/')]))
-        print('Example usage: autotest.py cs1000 lab02 [...]')
         exit()
         
 def load_tests(directory, exercise='', test_name='', challenge=False):
