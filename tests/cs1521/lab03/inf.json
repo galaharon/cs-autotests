@@ -1,0 +1,11 @@
+{  
+    "name":"infinity",
+    "authors":["Gal Aharon"],
+    "binary":"maf",
+    "args":["0", "11111111", "00000000000000000000000"],
+    "input":[],
+    "expected":[  
+        "bits : 0 11111111 00000000000000000000000",
+        "float: inf"
+    ]
+}

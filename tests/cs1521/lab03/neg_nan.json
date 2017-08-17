@@ -1,0 +1,11 @@
+{  
+    "name":"negative nan",
+    "authors":["Gal Aharon"],
+    "binary":"maf",
+    "args":["1", "11111111", "00000000000000000000001"],
+    "input":[],
+    "expected":[  
+        "bits : 1 11111111 00000000000000000000001",
+        "float: -nan"
+    ]
+}
